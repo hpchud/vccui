@@ -1,0 +1,37 @@
+{
+  "author": "Joshua Higgins",
+  "name": "qgg-app",
+  "version": "0.0.1",
+  "dependencies": {
+    "bcrypt": "^0.8.5",
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "jsonwebtoken": "^5.7.0",
+    "method-override": "^2.3.5",
+    "optimist": "^0.6",
+    "pty.js": "^0.3.0",
+    "socket.io": "^1.3.7"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-bump": "0.0.6",
+    "grunt-coffeelint": "~0.0.10",
+    "grunt-contrib-clean": "^0.4.1",
+    "grunt-contrib-coffee": "^0.7.0",
+    "grunt-contrib-concat": "^0.3.0",
+    "grunt-contrib-copy": "^0.4.1",
+    "grunt-contrib-jshint": "^0.4.3",
+    "grunt-contrib-less": "~0.11.0",
+    "grunt-contrib-uglify": "^0.2.7",
+    "grunt-conventional-changelog": "^0.1.2",
+    "grunt-html2js": "^0.1.9",
+    "grunt-karma": "^0.8.2",
+    "grunt-ng-annotate": "^0.8.0",
+    "grunt-express": "~1.0.0-beta2",
+    "grunt-contrib-watch": "~0.5.1",
+    "karma": "^0.12.9",
+    "karma-coffee-preprocessor": "^0.2.1",
+    "karma-firefox-launcher": "^0.1.3",
+    "karma-jasmine": "^0.1.5"
+  }
+}

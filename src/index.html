@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html ng-app="vccui" ng-controller="AppCtrl">
+  <head>
+    <title ng-bind="pageTitle">QGG</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- font awesome from BootstrapCDN -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
+    <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
+
+    <!-- compiled JavaScript --><% scripts.forEach( function ( file ) { %>
+    <script type="text/javascript" src="<%= file %>"></script><% }); %>
+
+  </head>
+  
+  <body class="hold-transition skin-blue sidebar-mini">
+
+      <div class="wrapper">
+
+      <!-- Main Header -->
+      <header class="main-header">
+
+        <!-- Logo -->
+        <a href ui-sref="dash()" class="logo">
+          <!-- mini logo for sidebar mini 50x50 pixels -->
+          <span class="logo-mini"><b>QGG</b></span>
+          <!-- logo for regular state and mobile devices -->
+          <span class="logo-lg">QueensGate <b>Grid</b></span>
+        </a>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+          <!-- Sidebar toggle button-->
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+          <!-- Navbar Right Menu -->
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              
+              <!-- User Account Menu -->
+              <li class="dropdown user user-menu">
+                <!-- Menu Toggle Button -->
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <!-- The user image in the navbar-->
+                  <img src="assets/me.jpg" class="user-image" alt="User Image">
+                  <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                  <span class="hidden-xs" ng-if="currentUser">{{ currentUser.userFullName }}</span>
+                  <span class="hidden-xs" ng-if="!currentUser">Not logged in </span>
+                </a>
+                <ul class="dropdown-menu" ng-if="currentUser">
+                  <!-- The user image in the menu -->
+                  <li class="user-header">
+                    <img src="assets/me.jpg" class="img-circle" alt="User Image">
+                    <p>
+                      {{ currentUser.userFullName }}
+                      <small>{{ currentUser.organisation.join(",") }}</small>
+                    </p>
+                  </li>
+                  <!-- Menu Footer-->
+                  <li class="user-footer">
+                    <div class="pull-right">
+                      <a href="javascript:mx_user_logout();" class="btn btn-default btn-flat">Sign out</a>
+                    </div>
+                    <div class="pull-left">
+                      <a href="#" class="btn btn-default btn-flat">Settings</a>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <!-- Left side column. contains the logo and sidebar -->
+      <aside class="main-sidebar">
+
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+
+          <!-- Sidebar Menu -->
+          <ul class="sidebar-menu">
+            <li class="header">Navigation</li>
+            <!-- Optionally, you can add icons to the links -->
+            <li><a href ui-sref="dash"><i class="fa fa-home"></i> <span>Home</span></a></li>
+            <li><a href ><i class="fa fa-terminal"></i> <span>Console</span></a></li>
+            <li><a href ><i class="fa fa-folder-open"></i> <span>File Manager</span></a></li>
+            <li><a href ><i class="fa fa-cog"></i> <span>Tools</span></a></li>
+          </ul><!-- /.sidebar-menu -->
+        </section>
+        <!-- /.sidebar -->
+      </aside>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        
+        <div id="page-wrapper" ng-if="currentUser" ui-view="main"></div>
+
+      </div><!-- /.content-wrapper -->
+
+      <div class="modal fade" data-keyboard="false" data-backdrop="static" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="width:300px">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="loginModalLabel">Please sign in</h4>
+          </div>
+
+          <form name="loginForm" ng-controller="LoginCtrl" ng-submit="login(credentials)" novalidate>
+
+            <div class="modal-body">
+              <label for="loginModalInputServer" class="sr-only">Server</label>
+              <input type="text" id="server" ng-model="credentials.server" class="form-control" placeholder="Server" required>
+              <label for="loginModalInputUsername" class="sr-only">Username</label>
+              <input type="text" id="username" ng-model="credentials.username" class="form-control" placeholder="Username" required autofocus>
+              <label for="loginModalInputPassword" class="sr-only">Password</label>
+              <input type="password" id="password" ng-model="credentials.password" class="form-control" placeholder="Password" required>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+      <!-- Main Footer -->
+      <footer class="main-footer">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+          version 0.1
+        </div>
+        <!-- Default to the left -->
+        <strong>Copyright &copy; 2016 kxes.net.</strong> All rights reserved.
+      </footer>
+
+    </div><!-- ./wrapper -->
+
+  </body>
+</html>
