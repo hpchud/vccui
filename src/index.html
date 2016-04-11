@@ -11,7 +11,9 @@
     <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
     <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
 
-    <!-- compiled JavaScript --><% scripts.forEach( function ( file ) { %>
+    <!-- compiled JavaScript -->
+    <script type="text/javascript" src="/wetty/socket.io/socket.io.js"></script>
+    <% scripts.forEach( function ( file ) { %>
     <script type="text/javascript" src="<%= file %>"></script><% }); %>
 
   </head>
@@ -85,7 +87,7 @@
             <li class="header">Navigation</li>
             <!-- Optionally, you can add icons to the links -->
             <li><a href ui-sref="dash"><i class="fa fa-home"></i> <span>Home</span></a></li>
-            <li><a href ><i class="fa fa-terminal"></i> <span>Console</span></a></li>
+            <li><a href ui-sref="console"><i class="fa fa-terminal"></i> <span>Console</span></a></li>
             <li><a href ><i class="fa fa-folder-open"></i> <span>File Manager</span></a></li>
             <li><a href ><i class="fa fa-cog"></i> <span>Tools</span></a></li>
           </ul><!-- /.sidebar-menu -->

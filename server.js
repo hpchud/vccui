@@ -6,6 +6,8 @@ var pam = require('authenticate-pam');
 var notp = require('notp');
 var base32 = require('thirty-two');
 var PouchDB = require('pouchdb');
+var pty = require('pty.js');
+var fs = require('fs');
 
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -110,13 +112,44 @@ app.use('/api', router);
 var socket = io(server,{path: '/wetty/socket.io'});
 
 socket.on('connection', function(socket){
-
+    var sshuser = '';
+    var sshport = 32322;
+    var sshauth = 'password';
+    var sshhost = "localhost";
+    var request = socket.request;
     console.log((new Date()) + ' Connection accepted.');
 
-    socket.on('disconnect', function() {
-        console.log("disconnect");
+    var term;
+    if (process.getuid() == 0) {
+        term = pty.spawn('/bin/login', [], {
+            name: 'xterm-256color',
+            cols: 80,
+            rows: 30
+        });
+    } else {
+        term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport, '-o', 'PreferredAuthentications=' + sshauth], {
+            name: 'xterm-256color',
+            cols: 80,
+            rows: 30
+        });
+    }
+    console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser)
+    term.on('data', function(data) {
+        socket.emit('output', data);
     });
-})
+    term.on('exit', function(code) {
+        console.log((new Date()) + " PID=" + term.pid + " ENDED")
+    });
+    socket.on('resize', function(data) {
+        term.resize(data.col, data.row);
+    });
+    socket.on('input', function(data) {
+        term.write(data);
+    });
+    socket.on('disconnect', function() {
+        term.end();
+    });
+});
 
 
 exports = module.exports = server;

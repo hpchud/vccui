@@ -6,6 +6,7 @@ angular.module( 'vccui', [
   'vccui.constants',
   'vccui.database',
   'vccui.dash',
+  'vccui.console',
   'ui.router'
 ])
 

@@ -24,6 +24,7 @@ angular.module( 'vccui.dash', [
  * And of course we define a controller for our route.
  */
 .controller( 'DashCtrl', function DashController( $scope ) {
+ 
 })
 
 ;
