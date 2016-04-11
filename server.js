@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io');
+var pam = require('authenticate-pam');
 
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -35,26 +36,23 @@ router.post('/authenticate', function(req, res) {
   var username = req.body.username;
   var password = req.body.password;
 
-  if(username in users) {
-  	if (users[username]["password"] == password) {
-  		// generate a token
-  		var token = jwt.sign(username, "ilovescotch", {
+  pam.authenticate(username, password, function (err) {
+    if (err) {
+      // authentication failed
+      res.json({
+          success: false
+        });
+    } else {
+      // success, generate a token
+      var token = jwt.sign(username, "ilovescotch", {
           expiresIn: 21600 // 6 hours
         });
         res.json({
           success: true,
           token: token
         });
-  	} else {
-  		res.json({
-          success: false
-        });
-  	}
-  } else {
-  	res.json({
-          success: false
-        });
-  }
+    }
+  })
 });
 
 router.use(function(req, res, next) {

@@ -3,6 +3,7 @@
   "name": "qgg-app",
   "version": "0.0.1",
   "dependencies": {
+    "authenticate-pam": "^1.0.0",
     "bcrypt": "^0.8.5",
     "body-parser": "^1.15.0",
     "express": "^4.13.4",
