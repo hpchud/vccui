@@ -20,16 +20,24 @@ angular.module( 'vccui', [
       if(result.success === false) {
         deferred.reject();
       } else {
-        $rootScope.setCurrentUser(result);
+        $rootScope.setCurrentUser(result['userdata']);
         deferred.resolve();
       }
+    });
+    return deferred.promise;
+  };
+
+  authService.getUser = function () {
+    var deferred = $q.defer();
+    jQuery.post('/api/user', credentials, function (result) {
+      deferred.resolve(result);
     });
     return deferred.promise;
   };
  
   authService.isAuthenticated = function () {
     if($rootScope.currentUser) {
-      return !!$rootScope.currentUser.user;
+      return !!$rootScope.currentUser.name;
     } else {
       return false;
     }

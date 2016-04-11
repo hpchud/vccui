@@ -48,7 +48,7 @@
                   <!-- The user image in the navbar-->
                   <img src="assets/me.jpg" class="user-image" alt="User Image">
                   <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                  <span class="hidden-xs" ng-if="currentUser">{{ currentUser.user }}</span>
+                  <span class="hidden-xs" ng-if="currentUser">{{ currentUser.name }}</span>
                   <span class="hidden-xs" ng-if="!currentUser">Not logged in </span>
                 </a>
                 <ul class="dropdown-menu" ng-if="currentUser">

@@ -5,6 +5,7 @@ var io = require('socket.io');
 var pam = require('authenticate-pam');
 var notp = require('notp');
 var base32 = require('thirty-two');
+var PouchDB = require('pouchdb');
 
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -20,8 +21,8 @@ app.use('/app', express.static(__dirname + '/build'));
 // token secret
 var secret = "scotchscotchscotch"
 
-// couchdb connection
-
+// the couchdb
+var db = new PouchDB('http://localhost:5984/qggusers');
 
 // the API
 var router = express.Router();
@@ -34,26 +35,37 @@ router.post('/authenticate', function(req, res) {
   var username = req.body.username;
   var password = req.body.password;
 
-  pam.authenticate(username, password, function (err) {
-    if (err) {
-      // authentication failed
-      res.json({
+  // check we in the db first
+  db.get(username).then(function (doc) {
+    pam.authenticate(username, password, function (err) {
+      if (err) {
+        // authentication failed
+        res.json({
           success: false
         });
-    } else {
-      // success, generate a token
-      var userdata = {
-        "username": username
-      };
-      var token = jwt.sign(userdata, secret, {
+      } else {
+        // authentication success, get user data
+        var userdata = {
+          "name": doc['_id'],
+          "fullname": doc['fullname'],
+          "group": doc['group']
+        };
+        var token = jwt.sign(userdata, secret, {
           expiresIn: 21600 // 6 hours
         });
         res.json({
           success: true,
-          token: token
+          token: token,
+          userdata: userdata
         });
-    }
-  })
+      }
+    });
+  }).catch(function (err) {
+    // authentication failed
+    res.json({
+      success: false
+    });
+  });
 });
 
 router.use(function(req, res, next) {
@@ -67,7 +79,7 @@ router.use(function(req, res, next) {
     // verifies secret and checks exp
     jwt.verify(token, secret, function(err, decoded) {      
       if (err) {
-        return res.json({ success: false, message: 'not authenticated' });    
+        return res.json({ success: false, message: 'not authenticated' });
       } else {
         // if everything is good, save to request for use in other routes
         req.userdata = decoded; 
@@ -85,8 +97,8 @@ router.use(function(req, res, next) {
 });
 
 router.get('/user', function(req, res) {
-  // return detailed user information from db
-	res.json(req.userdata);
+  // return detailed user information from token
+  res.json(req.userdata);
 });
 
 app.use('/api', router);
