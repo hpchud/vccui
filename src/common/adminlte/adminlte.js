@@ -243,6 +243,10 @@ function _init() {
       var _this = this;
       _this.fix();
       _this.fixSidebar();
+      // wait for terminal frame to be in place
+      setTimeout(function() {
+        _this.fix();
+      }, 1000);
       $(window, ".wrapper").resize(function () {
         _this.fix();
         _this.fixSidebar();
@@ -261,9 +265,11 @@ function _init() {
         var postSetWidth;
         if (window_height >= sidebar_height) {
           $(".content-wrapper, .right-side").css('min-height', window_height - neg);
+          $("#TerminalFrame").css('height', window_height - neg);
           postSetWidth = window_height - neg;
         } else {
           $(".content-wrapper, .right-side").css('min-height', sidebar_height);
+          $("#TerminalFrame").css('height', sidebar_height);
           postSetWidth = sidebar_height;
         }
 

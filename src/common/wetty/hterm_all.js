@@ -8359,7 +8359,7 @@ hterm.ScrollPort.prototype.decorate = function(div) {
   this.div_ = div;
 
   this.iframe_ = div.ownerDocument.createElement('iframe');
-  this.iframe.setAttribute("id", "TerminalFrame");
+  this.iframe_.setAttribute("id", "TerminalFrame");
   this.iframe_.style.cssText = (
       'border: 0;' +
       'height: 100%;' +

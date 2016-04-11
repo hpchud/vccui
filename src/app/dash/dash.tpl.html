@@ -1,13 +1,132 @@
 <section class="content-header">
   <h1>
-    Dashboard
-    <small>Welcome, {{ currentUser.userName }}.</small>
+    Hello {{ currentUser.fullname.split(" ")[0] }}</small>
   </h1>
 </section>
 
 <!-- Main content -->
 <section class="content">
 
-<div id="terminal"></div>
+<br />
+
+  <div class="row">
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-green"><i class="fa fa-check"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Linux Cluster</span>
+          <span class="info-box-number">Eridani</span>
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-orange"><i class="fa fa-line-chart"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Linux Cluster</span>
+          <span class="info-box-number">Sol</span>
+          Load is high
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-green"><i class="fa fa-check"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Windows Pool</span>
+          <span class="info-box-number">Condor</span>
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-green"><i class="fa fa-check"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">GPU Cluster</span>
+          <span class="info-box-number">Vega</span>
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-green"><i class="fa fa-check"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Advanced Research</span>
+          <span class="info-box-number">Ascella</span>
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-green"><i class="fa fa-check"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Login / User Interface</span>
+          <span class="info-box-number">Bellatrix</span>
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-orange"><i class="fa fa-clock-o"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Shared storage</span>
+          <span class="info-box-number">Regulus</span>
+          Planned downtime soon
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-green"><i class="fa fa-check"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">User directory</span>
+          <span class="info-box-number">Spica</span>
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div>
+
+  </div>
+
+  <h3>Messages</h3>
+
+  <ul class="timeline">
+
+		<!-- timeline time label -->
+		<li class="time-label">
+		    <span class="bg-red">
+		        5th April 2016
+		    </span>
+		</li>
+		<!-- /.timeline-label -->
+
+		<!-- timeline item -->
+		<li>
+		    <!-- timeline icon -->
+		    <i class="fa fa-envelope bg-blue"></i>
+		    <div class="timeline-item">
+		        <span class="time"><i class="fa fa-clock-o"></i> 12:00</span>
+
+		        <h3 class="timeline-header">Message of the Day</h3>
+
+		        <div class="timeline-body">
+		            Welcome to the QGG
+		        </div>
+		    </div>
+		</li>
+		<!-- END timeline item -->
+
+	</ul>
 
 </section>

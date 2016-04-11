@@ -35,6 +35,8 @@ angular.module( 'vccui.console', [
           window.term = term;
           term.decorate(document.getElementById('terminal'));
 
+          jQuery.AdminLTE.layout.fix();
+
           term.setCursorPosition(0, 0);
           term.setCursorVisible(true);
           term.prefs_.set('ctrl-c-copy', true);
