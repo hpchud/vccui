@@ -1,3 +1,5 @@
+/*jshint -W024 */
+
 angular.module( 'vccui', [
   'templates-app',
   'templates-common',
@@ -21,16 +23,25 @@ angular.module( 'vccui', [
         deferred.reject();
       } else {
         $rootScope.setCurrentUser(result['userdata']);
+        localStorage.setItem("vccui_token", result['token']);
         deferred.resolve();
       }
     });
     return deferred.promise;
   };
 
-  authService.getUser = function () {
+  authService.getUser = function (token) {
     var deferred = $q.defer();
-    jQuery.post('/api/user', credentials, function (result) {
-      deferred.resolve(result);
+    jQuery.ajax({
+      type: "POST",
+      url: "/api/user",
+      data: {token: token},
+      success: function (result) {
+        deferred.resolve(result);
+      },
+      error: function (XMLHttpRequest, textStatus, error) {
+        deferred.reject(textStatus);
+      }
     });
     return deferred.promise;
   };
@@ -119,23 +130,14 @@ angular.module( 'vccui', [
     var token = localStorage.getItem("vccui_token");
     if(token) {
       console.log("Using token");
-      /*Database.setServer(server);
-      // try and get our user doc
-      Database.user().get("org.couchdb.user:"+username).then(function (response) {
-        // do the login using the cookie
-        $rootScope.setCurrentUser({
-          id: response['_id'],
-          userName: response['name'],
-          userFullName: response['mx_full_name'],
-          userRole: response['mx_role'],
-          allowedSites: response['mx_allowed_sites'],
-          organisation: response['mx_org']
-        });
+      AuthService.getUser(token).then(function (userdata) {
+        $rootScope.setCurrentUser(userdata);
         $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-      }, function (error) {
-        // show the modal
-        $('#loginModal').modal('show');
-      });*/
+      }).catch(function (err) {
+        console.log("token probably expired, deleting it...");
+        localStorage.setItem("vccui_token", "");
+        $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+      });
     } else {
       // show the modal
       $('#loginModal').modal('show');

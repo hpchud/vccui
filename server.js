@@ -79,7 +79,10 @@ router.use(function(req, res, next) {
     // verifies secret and checks exp
     jwt.verify(token, secret, function(err, decoded) {      
       if (err) {
-        return res.json({ success: false, message: 'not authenticated' });
+        return res.status(403).send({ 
+            success: false, 
+            message: 'not authenticated' 
+        });
       } else {
         // if everything is good, save to request for use in other routes
         req.userdata = decoded; 
@@ -92,11 +95,10 @@ router.use(function(req, res, next) {
         success: false, 
         message: 'not authenticated' 
     });
-    
   }
 });
 
-router.get('/user', function(req, res) {
+router.post('/user', function(req, res) {
   // return detailed user information from token
   res.json(req.userdata);
 });
