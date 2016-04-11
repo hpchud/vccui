@@ -56,17 +56,16 @@
                   <li class="user-header">
                     <img src="assets/me.jpg" class="img-circle" alt="User Image">
                     <p>
-                      {{ currentUser.userFullName }}
-                      <small>{{ currentUser.organisation.join(",") }}</small>
+                      {{ currentUser.fullname }}
+                      <small>{{ currentUser.group }}</small>
                     </p>
                   </li>
                   <!-- Menu Footer-->
                   <li class="user-footer">
                     <div class="pull-right">
-                      <a href="javascript:mx_user_logout();" class="btn btn-default btn-flat">Sign out</a>
+                      <a href class="btn btn-default btn-flat">Sign out</a>
                     </div>
                     <div class="pull-left">
-                      <a href="#" class="btn btn-default btn-flat">Settings</a>
                     </div>
                   </li>
                 </ul>
@@ -111,12 +110,14 @@
           <form name="loginForm" ng-controller="LoginCtrl" ng-submit="login(credentials)" novalidate>
 
             <div class="modal-body">
-              <label for="loginModalInputServer" class="sr-only">Server</label>
-              <input type="text" id="server" ng-model="credentials.server" class="form-control" placeholder="Server" required>
-              <label for="loginModalInputUsername" class="sr-only">Username</label>
+              <label for="loginModalInputUsername" >Username</label>
               <input type="text" id="username" ng-model="credentials.username" class="form-control" placeholder="Username" required autofocus>
-              <label for="loginModalInputPassword" class="sr-only">Password</label>
+              <br />
+              <label for="loginModalInputPassword">Password</label>
               <input type="password" id="password" ng-model="credentials.password" class="form-control" placeholder="Password" required>
+              <br />
+              <label for="loginModalInputServer">Two Step verification</label>
+              <input type="text" id="server" ng-model="credentials.server" class="form-control" placeholder="Code" required>
             </div>
             <div class="modal-footer">
               <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
