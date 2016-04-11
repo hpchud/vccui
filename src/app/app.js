@@ -29,7 +29,7 @@ angular.module( 'vccui', [
  
   authService.isAuthenticated = function () {
     if($rootScope.currentUser) {
-      return !!$rootScope.currentUser.id;
+      return !!$rootScope.currentUser.user;
     } else {
       return false;
     }
@@ -92,6 +92,7 @@ angular.module( 'vccui', [
   $rootScope.isAuthorized = AuthService.isAuthorized;
   // use setter to avoid shadow properties
   $rootScope.setCurrentUser = function (user) {
+    console.log(user);
     $rootScope.currentUser = user;
   };
   // add function to convert unix time on root scope

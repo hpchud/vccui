@@ -15,15 +15,8 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 // service the static angular app
 app.use('/app', express.static(__dirname + '/build'));
 
-// test users
-
-var users = {
-	"josh": {
-		"name": "Joshua Higgins",
-		"password": "lkjlkjq",
-		"group": "admin"
-	}
-};
+// token secret
+var secret = "scotchscotchscotch"
 
 // the API
 var router = express.Router();
@@ -44,12 +37,16 @@ router.post('/authenticate', function(req, res) {
         });
     } else {
       // success, generate a token
-      var token = jwt.sign(username, "ilovescotch", {
+      var userdata = {
+        "username": username
+      };
+      var token = jwt.sign(userdata, secret, {
           expiresIn: 21600 // 6 hours
         });
         res.json({
           success: true,
-          token: token
+          token: token,
+          user: username
         });
     }
   })
@@ -64,12 +61,12 @@ router.use(function(req, res, next) {
   if (token) {
 
     // verifies secret and checks exp
-    jwt.verify(token, 'ilovescotch', function(err, decoded) {      
+    jwt.verify(token, secret, function(err, decoded) {      
       if (err) {
         return res.json({ success: false, message: 'not authenticated' });    
       } else {
         // if everything is good, save to request for use in other routes
-        req.username = decoded; 
+        req.userdata = decoded; 
         next();
       }
     });
@@ -84,7 +81,8 @@ router.use(function(req, res, next) {
 });
 
 router.get('/user', function(req, res) {
-	res.json(users[req.username]);
+  // return detailed user information
+	res.json(req.userdata);
 });
 
 app.use('/api', router);
