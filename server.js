@@ -120,7 +120,7 @@ socket.on('connection', function(socket){
     console.log((new Date()) + ' Connection accepted.');
 
     var term;
-    if (process.getuid() == 0) {
+    /*if (process.getuid() == 0) {
         term = pty.spawn('/bin/login', [], {
             name: 'xterm-256color',
             cols: 80,
@@ -133,6 +133,14 @@ socket.on('connection', function(socket){
             rows: 30
         });
     }
+    */
+    // spawn the terminal
+    term = pty.spawn('/bin/bash', ['-c', 'tmux attach || tmux new'], {
+        name: 'xterm-256color',
+        cols: 80,
+        rows: 30
+    });
+    // set up events
     console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser)
     term.on('data', function(data) {
         socket.emit('output', data);

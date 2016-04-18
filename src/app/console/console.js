@@ -28,6 +28,10 @@ angular.module( 'vccui.console', [
   var buf = '';
   var socket = io(location.origin, {path: '/wetty/socket.io'});
 
+  $scope.$on("$destroy", function(){
+      socket.disconnect();
+  });
+
   socket.on('connect', function() {
       lib.init(function() {
           hterm.defaultStorage = new lib.Storage.Local();
