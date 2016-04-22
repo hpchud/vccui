@@ -18,6 +18,7 @@ angular.module( 'vccui', [
   var authService = {};
  
   authService.login = function (credentials) {
+    console.log(credentials);
     var deferred = $q.defer();
     jQuery.post('/api/authenticate', credentials, function (result) {
       if(result.success === false) {
@@ -202,7 +203,8 @@ angular.module( 'vccui', [
 
   $scope.credentials = {
     username: '',
-    password: ''
+    password: '',
+    totptoken: ''
   };
   $scope.login = function (credentials) {
     AuthService.login(credentials).then(function () {
