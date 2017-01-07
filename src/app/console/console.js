@@ -28,6 +28,23 @@ angular.module( 'vccui.console', [
   var buf = '';
   var socket = io(location.origin, {path: '/wetty/socket.io'});
 
+  var resizeTerminal = function () {
+    // resize to fit screen
+    var height = $(window).height() - $('#MainHeader').height();
+    var width = $(window).width() - $('#MainSidebar').width();
+    jQuery('#TerminalFrame').height(height);
+    jQuery('#TerminalFrame').width(width);
+  };
+
+  jQuery(window).on('resize', function () {
+    resizeTerminal();
+  });
+
+  jQuery(window).on('sidebarToggled', function (e) {
+    console.log("sidebar changed");
+    setTimeout(resizeTerminal, 500);
+  });
+
   $scope.$on("$destroy", function(){
       socket.disconnect();
   });
@@ -70,6 +87,7 @@ angular.module( 'vccui.console', [
           };
 
           Wetty.prototype.onTerminalResize = function(col, row) {
+              resizeTerminal();
               socket.emit('resize', { col: col, row: row });
           };
 

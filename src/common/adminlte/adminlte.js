@@ -323,6 +323,7 @@ function _init() {
 
       //Enable sidebar toggle
       $(toggleBtn).on('click', function (e) {
+        $(window).trigger('sidebarToggled');
         e.preventDefault();
 
         //Enable sidebar push menu
