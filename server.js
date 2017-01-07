@@ -51,6 +51,16 @@ router.get('/', function(req, res) {
     });
 });
 
+var authenticate_pam = function (username, password, callback) {
+    pam.authenticate(username, password, function(err) {
+        if (err) {
+            callback(false);
+        } else {
+            callback(true);
+        }
+    });
+}
+
 router.post('/authenticate', function(req, res) {
     var username = req.body.username;
     var password = req.body.password;
@@ -58,9 +68,10 @@ router.post('/authenticate', function(req, res) {
 
     // check we in the db first
     db.get(username).then(function(doc) {
-        console.log("found user in db")
-        pam.authenticate(username, password, function(err) {
-            if (err) {
+        console.log("found user in db");
+        // this callback is called from the authentication module to complete the login
+        var auth_module_callback = function (success) {
+            if (!success) {
                 // authentication failed
                 console.error("pam authentication failed for", username);
                 res.json({
@@ -105,7 +116,9 @@ router.post('/authenticate', function(req, res) {
                 token: token,
                 userdata: userdata
             });
-        });
+        };
+        // do the required auth module
+        authenticate_pam(username, password, auth_module_callback);
     }).catch(function(err) {
         // authentication failed
         res.json({
