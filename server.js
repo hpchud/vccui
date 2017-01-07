@@ -138,29 +138,34 @@ var socket = io(server, {
 
 var setupSocket = function(socket, data) {
     console.log('socket connection authenticated');
-    // set up terminal
-    var term;
-    term = pty.spawn('/bin/login', [], {
-        name: 'xterm-256color',
-        cols: 80,
-        rows: 30
-    });
-    console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + data.name);
-    // set up events
-    term.on('data', function(data) {
-        socket.emit('output', data);
-    });
-    term.on('exit', function(code) {
-        console.log((new Date()) + " PID=" + term.pid + " ENDED")
-    });
-    socket.on('resize', function(data) {
-        term.resize(data.col, data.row);
-    });
-    socket.on('input', function(data) {
-        term.write(data);
-    });
-    socket.on('disconnect', function() {
-        term.end();
+    // get user data from the db, don't rely on client provided uid!
+    db.get(data.name).then(function(doc) {
+        var uid = doc['localuid'];
+        // set up terminal
+        var term;
+        term = pty.spawn('/bin/bash', ['-c', 'tmux attach || tmux new'], {
+            name: 'xterm-256color',
+            cols: 80,
+            rows: 30,
+            uid: uid
+        });
+        console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + data.name);
+        // set up events
+        term.on('data', function(data) {
+            socket.emit('output', data);
+        });
+        term.on('exit', function(code) {
+            console.log((new Date()) + " PID=" + term.pid + " ENDED")
+        });
+        socket.on('resize', function(data) {
+            term.resize(data.col, data.row);
+        });
+        socket.on('input', function(data) {
+            term.write(data);
+        });
+        socket.on('disconnect', function() {
+            term.end();
+        });
     });
 };
 

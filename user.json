@@ -1,8 +1,9 @@
 {
    "_id": "joshiggins",
-   "_rev": "3-e9558e5019217a93c4b73e9c3d1da4ad",
+   "_rev": "5-5f14078e9a733f1bf6841916a2b227ba",
    "fullname": "Joshua Higgins",
    "group": "admins",
    "require_twostep": false,
-   "totp_key": null
+   "totp_key": null,
+   "localuid": 1000
 }
