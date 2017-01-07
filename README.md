@@ -58,7 +58,7 @@ You will want to run `grunt compile` as this will minify all the client side JS 
 
 In addition, you need to run the `server.js` that handles the websocket and opening a console for the user. 
 
-The websocket server and the client side web application can be hosted from different servers. It is recommended to set up a reverse proxy to achieve this, by proxying to a different location for the `socket.io` endpoint.
+The websocket server and the client side web application can be hosted from different servers. It is recommended to set up a reverse proxy to achieve this, by proxying to a different location for the `socket.io` endpoint. Now you understand why a CouchDB database is used - so that multiple server instances may share the same state (user account mappings and OTP secrets).
 
 ## Advanced usage
 
