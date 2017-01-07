@@ -15,7 +15,8 @@
     "pty.js": "^0.3.0",
     "socket.io": "^1.3.7",
     "socketio-auth": "^0.1.0",
-    "thirty-two": "^1.0.1"
+    "thirty-two": "^1.0.1",
+    "yamljs": "^0.2.8"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

@@ -9,6 +9,7 @@ var PouchDB = require('pouchdb');
 var pty = require('pty.js');
 var fs = require('fs');
 var path = require('path');
+var yamljs = require('yamljs');
 
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -22,14 +23,24 @@ app.use(bodyParser.json({
     type: 'application/vnd.api+json'
 }));
 
+// load configuration file
+var config = yamljs.load("./config.yml")
+
 // service the static angular app
 app.use('/app', express.static(__dirname + '/build'));
 
 // token secret
-var secret = "scotchscotchscotch"
+var secret = config.secret;
 
 // the couchdb
-var db = new PouchDB('http://localhost:5984/qggusers');
+var options = {};
+if (config.database.username && config.database.password) {
+    options.auth = {};
+    options.auth.username = config.database.username;
+    options.auth.password = config.database.password;
+}
+
+var db = new PouchDB(config.database.url, options);
 
 // the API
 var router = express.Router();
