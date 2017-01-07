@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="vccui" ng-controller="AppCtrl">
   <head>
-    <title ng-bind="pageTitle">QGG</title>
+    <title ng-bind="pageTitle">vccui</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -28,9 +28,9 @@
         <!-- Logo -->
         <a href ui-sref="dash()" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
-          <span class="logo-mini"><b>QGG</b></span>
+          <span class="logo-mini">vcc<b>ui</b></span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg">QueensGate <b>Grid</b></span>
+          <span class="logo-lg">vcc<b>ui</b></span>
         </a>
 
         <!-- Header Navbar -->
@@ -119,7 +119,7 @@
               <input type="password" id="password" ng-model="credentials.password" class="form-control" placeholder="Password" required>
               <br />
               <label for="loginModalInputServer">Two Step verification</label>
-              <input type="text" id="totptoken" ng-model="credentials.totptoken" class="form-control" placeholder="Code" required>
+              <input type="text" id="totptoken" ng-model="credentials.totptoken" class="form-control" placeholder="leave blank if not set up" required>
             </div>
             <div class="modal-footer">
               <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
