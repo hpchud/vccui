@@ -47,6 +47,22 @@ angular.module( 'vccui', [
     });
     return deferred.promise;
   };
+
+  authService.getPicture = function (token) {
+    var deferred = $q.defer();
+    jQuery.ajax({
+      type: "GET",
+      url: "/api/picture",
+      data: {token: token},
+      success: function (result) {
+        deferred.resolve(result);
+      },
+      error: function (XMLHttpRequest, textStatus, error) {
+        deferred.reject(textStatus);
+      }
+    });
+    return deferred.promise;
+  };
  
   authService.isAuthenticated = function () {
     if($rootScope.currentUser) {
@@ -135,6 +151,11 @@ angular.module( 'vccui', [
       AuthService.getUser(token).then(function (userdata) {
         $rootScope.setCurrentUser(userdata);
         $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+        // apply the user's image
+        AuthService.getPicture(token).then(function (data) {
+          jQuery('#UserPictureSmall').attr('src', data['picture']);
+          jQuery('#UserPictureLarge').attr('src', data['picture']);
+        });
       }).catch(function (err) {
         console.log("token probably expired, deleting it...");
         localStorage.setItem("vccui_token", "");

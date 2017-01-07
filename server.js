@@ -47,9 +47,11 @@ router.post('/authenticate', function(req, res) {
 
     // check we in the db first
     db.get(username).then(function(doc) {
+        console.log("found user in db")
         pam.authenticate(username, password, function(err) {
             if (err) {
                 // authentication failed
+                console.error("pam authentication failed for", username);
                 res.json({
                     success: false
                 });
@@ -57,6 +59,7 @@ router.post('/authenticate', function(req, res) {
             }
             // check if two step auth is required for this user
             if (doc['require_twostep']) {
+                console.log("twostep is required for", username);
                 // check for existence of token
                 if (!totptoken) {
                     res.json({
@@ -74,21 +77,23 @@ router.post('/authenticate', function(req, res) {
                     });
                     return;
                 }
-                // authentication success, get user data
-                var userdata = {
-                    "name": doc['_id'],
-                    "fullname": doc['fullname'],
-                    "group": doc['group']
-                };
-                var token = jwt.sign(userdata, secret, {
-                    expiresIn: 21600 // 6 hours
-                });
-                res.json({
-                    success: true,
-                    token: token,
-                    userdata: userdata
-                });
+            } else {
+                console.log("twostep is not required for", username);
             }
+            // authentication success, get user data
+            var userdata = {
+                "name": doc['_id'],
+                "fullname": doc['fullname'],
+                "group": doc['group']
+            };
+            var token = jwt.sign(userdata, secret, {
+                expiresIn: 21600 // 6 hours
+            });
+            res.json({
+                success: true,
+                token: token,
+                userdata: userdata
+            });
         });
     }).catch(function(err) {
         // authentication failed
@@ -126,6 +131,14 @@ router.use(function(req, res, next) {
 router.post('/user', function(req, res) {
     // return detailed user information from token
     res.json(req.userdata);
+});
+
+router.get('/picture', function(req, res) {
+    // include the user's image in this data
+    var userdata = req.userdata;
+    db.get(userdata.name).then(function(doc) {
+        res.json({picture: doc['picture']});
+    });
 });
 
 app.use('/api', router);
