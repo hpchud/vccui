@@ -23,7 +23,7 @@ angular.module( 'vccui.console', [
 /**
  * And of course we define a controller for our route.
  */
-.controller( 'ConsoleCtrl', function ConsoleController( $scope ) {
+.controller( 'ConsoleCtrl', function ConsoleController( $scope, $rootScope ) {
   var term;
   var buf = '';
   var socket = io(location.origin, {path: '/wetty/socket.io'});
@@ -32,7 +32,8 @@ angular.module( 'vccui.console', [
       socket.disconnect();
   });
 
-  socket.on('connect', function() {
+  socket.on('authenticated', function() {
+    console.log('socket is authenticated');
       lib.init(function() {
           hterm.defaultStorage = new lib.Storage.Local();
           term = new hterm.Terminal();
@@ -98,6 +99,10 @@ angular.module( 'vccui.console', [
       console.log("Socket.io connection closed");
   });
 
+  socket.on('connect', function() {
+    console.log('sending authentication for socket');
+    socket.emit('authentication', {token: localStorage.getItem("vccui_token"), name: $rootScope.currentUser.name});
+  });
 
 })
 

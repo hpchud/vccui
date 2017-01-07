@@ -127,53 +127,69 @@ app.use('/api', router);
 
 var socket = io(server,{path: '/wetty/socket.io'});
 
-socket.on('connection', function(socket){
-    var sshuser = '';
-    var sshport = 32322;
-    var sshauth = 'password';
-    var sshhost = "localhost";
-    var request = socket.request;
-    console.log((new Date()) + ' Connection accepted.');
+var setupSocket = function(socket, data) {
+  console.log('socket connection authenticated');
+  // set up terminal
+  var term;
+  term = pty.spawn('/bin/login', [], {
+      name: 'xterm-256color',
+      cols: 80,
+      rows: 30
+  });
+  console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + data.name);
+  // set up events
+  term.on('data', function(data) {
+      socket.emit('output', data);
+  });
+  term.on('exit', function(code) {
+      console.log((new Date()) + " PID=" + term.pid + " ENDED")
+  });
+  socket.on('resize', function(data) {
+      term.resize(data.col, data.row);
+  });
+  socket.on('input', function(data) {
+      term.write(data);
+  });
+  socket.on('disconnect', function() {
+      term.end();
+  });
+};
 
-    var term;
-    /*if (process.getuid() == 0) {
-        term = pty.spawn('/bin/login', [], {
-            name: 'xterm-256color',
-            cols: 80,
-            rows: 30
-        });
-    } else {
-        term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport, '-o', 'PreferredAuthentications=' + sshauth], {
-            name: 'xterm-256color',
-            cols: 80,
-            rows: 30
-        });
+// socket authentication
+require('socketio-auth')(socket, {
+  authenticate: function (socket, data, callback) {
+    // check that we got a token
+    if (!data.token) {
+      console.error("there was no token supplied");
+      return callback(null, false);
     }
-    */
-    // spawn the terminal
-    term = pty.spawn('/bin/bash', ['-c', 'tmux attach || tmux new'], {
-        name: 'xterm-256color',
-        cols: 80,
-        rows: 30
-    });
-    // set up events
-    console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser)
-    term.on('data', function(data) {
-        socket.emit('output', data);
-    });
-    term.on('exit', function(code) {
-        console.log((new Date()) + " PID=" + term.pid + " ENDED")
-    });
-    socket.on('resize', function(data) {
-        term.resize(data.col, data.row);
-    });
-    socket.on('input', function(data) {
-        term.write(data);
-    });
-    socket.on('disconnect', function() {
-        term.end();
-    });
+    // check that the token is valid
+    console.log("authenticating socket connection with token");
+    try {
+      var decoded = jwt.verify(data.token, secret);
+    } catch (err) {
+      console.log("token is invalid");
+      return callback(null, false);
+    }
+    console.log("token is valid");
+    // check that decoded username matches
+    if (decoded.name == data.name) {
+      console.log("username is valid");
+      return callback(null, true);
+    } else {
+      console.log("username does not match");
+      return callback(null, false);
+    }
+  },
+  postAuthenticate: setupSocket
 });
+
+// connection handler
+socket.on('connection', function(socket) {
+  console.log('socket connection accepted, authenticating');
+});
+
+
 
 
 exports = module.exports = server;
