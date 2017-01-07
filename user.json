@@ -1,0 +1,8 @@
+{
+   "_id": "joshiggins",
+   "_rev": "3-e9558e5019217a93c4b73e9c3d1da4ad",
+   "fullname": "Joshua Higgins",
+   "group": "admins",
+   "require_twostep": false,
+   "totp_key": null
+}
