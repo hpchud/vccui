@@ -92,31 +92,26 @@ router.post('/authenticate', function(req, res) {
 });
 
 router.use(function(req, res, next) {
-
   // check header or url parameters or post parameters for token
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
-
   // decode token
   if (token) {
-
     // verifies secret and checks exp
-    jwt.verify(token, secret, function(err, decoded) {      
-      if (err) {
-        return res.status(403).send({ 
-            success: false, 
-            message: 'not authenticated' 
-        });
-      } else {
-        // if everything is good, save to request for use in other routes
-        req.userdata = decoded; 
-        next();
-      }
-    });
-
+    try {
+      var decoded = jwt.verify(token, secret);
+    } catch (err) {
+      return res.status(403).send({
+          success: false,
+          message: 'not authenticated'
+      });
+    }
+    // if everything is good, save to request for use in other routes
+    req.userdata = decoded;
+    next();
   } else {
-    return res.status(403).send({ 
-        success: false, 
-        message: 'not authenticated' 
+    return res.status(403).send({
+        success: false,
+        message: 'not authenticated'
     });
   }
 });
