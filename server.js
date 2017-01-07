@@ -46,37 +46,41 @@ router.post('/authenticate', function(req, res) {
         res.json({
           success: false
         });
-      } else {
-        // password matches, check the totp token
+        return;
+      }
+      // check if two step auth is required for this user
+      if(doc['require_twostep']) {
+        // check for existence of token
         if (!totptoken) {
           res.json({
             success: false
           });
-        } else {
-          var login = notp.totp.verify(totptoken, doc['totp_key']);
-          console.log("compare", totptoken, doc['totp_key']);
-          console.log(login);
-          if (!login) {
-            res.json({
-              success: false
-            });
-          } else {
-            // authentication success, get user data
-            var userdata = {
-              "name": doc['_id'],
-              "fullname": doc['fullname'],
-              "group": doc['group']
-            };
-            var token = jwt.sign(userdata, secret, {
-              expiresIn: 21600 // 6 hours
-            });
-            res.json({
-              success: true,
-              token: token,
-              userdata: userdata
-            });
-          }
+          return;
         }
+        // verify the token
+        var login = notp.totp.verify(totptoken, doc['totp_key']);
+        //console.log("compare", totptoken, doc['totp_key']);
+        //console.log(login);
+        if (!login) {
+          res.json({
+            success: false
+          });
+          return;
+        }
+        // authentication success, get user data
+        var userdata = {
+          "name": doc['_id'],
+          "fullname": doc['fullname'],
+          "group": doc['group']
+        };
+        var token = jwt.sign(userdata, secret, {
+          expiresIn: 21600 // 6 hours
+        });
+        res.json({
+          success: true,
+          token: token,
+          userdata: userdata
+        });
       }
     });
   }).catch(function (err) {
