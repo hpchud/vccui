@@ -1,0 +1,8 @@
+---
+
+secret: scotchscotchscotch
+motd: /etc/motd
+database:
+  url: http://localhost:5984/qggusers
+  username: user
+  password: pass

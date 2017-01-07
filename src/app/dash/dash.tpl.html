@@ -12,7 +12,7 @@
 		<!-- timeline time label -->
 		<li class="time-label">
 		    <span class="bg-red">
-		        5th April 2016
+		        {{ currentdate }}
 		    </span>
 		</li>
 		<!-- /.timeline-label -->
@@ -22,12 +22,12 @@
 		    <!-- timeline icon -->
 		    <i class="fa fa-envelope bg-blue"></i>
 		    <div class="timeline-item">
-		        <span class="time"><i class="fa fa-clock-o"></i> 12:00</span>
+		        <span class="time"><i class="fa fa-clock-o"></i> {{ currenttime }}</span>
 
 		        <h3 class="timeline-header">Message of the Day</h3>
 
 		        <div class="timeline-body">
-		            Welcome to the QGG
+		            {{ motd }}
 		        </div>
 		    </div>
 		</li>

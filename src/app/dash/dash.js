@@ -24,7 +24,22 @@ angular.module( 'vccui.dash', [
  * And of course we define a controller for our route.
  */
 .controller( 'DashCtrl', function DashController( $scope ) {
- 
+  $scope.motd = "";
+  $scope.currenttime = new Date().toLocaleTimeString();
+  $scope.currentdate = new Date().toLocaleDateString();
+  // get the message of the day
+  var token = localStorage.getItem("vccui_token");
+  jQuery.ajax({
+      type: "GET",
+      url: "/api/motd",
+      data: {token: token},
+      success: function (result) {
+        $scope.motd = result.motd;
+      },
+      error: function (XMLHttpRequest, textStatus, error) {
+        deferred.reject(textStatus);
+      }
+    });
 })
 
 ;

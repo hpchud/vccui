@@ -152,6 +152,16 @@ router.get('/picture', function(req, res) {
     });
 });
 
+router.get('/motd', function(req, res) {
+    // get the motd file contents
+    fs.readFile(config.motd, 'utf8', function (err,data) {
+      if (err) {
+        res.json({motd: "Could not load the Message of the Day, sorry about that. Maybe tomorrow?"})
+      }
+      res.json({motd: data});
+    });
+});
+
 app.use('/api', router);
 
 // the socket
