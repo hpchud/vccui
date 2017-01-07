@@ -8,6 +8,7 @@ var base32 = require('thirty-two');
 var PouchDB = require('pouchdb');
 var pty = require('pty.js');
 var fs = require('fs');
+var path = require('path');
 
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -197,9 +198,16 @@ socket.on('connection', function(socket) {
     console.log('socket connection accepted, authenticating');
 });
 
+// run the server
+if (path.basename(process.argv[1], ".js") == "server") {
+    app.listen(8000, function () {
+      console.log('server listening on port 8000');
+    });
+} else {
+    exports = module.exports = server;
+    // delegates use() function
+    exports.use = function() {
+        app.use.apply(app, arguments);
+    };
+}
 
-exports = module.exports = server;
-// delegates use() function
-exports.use = function() {
-    app.use.apply(app, arguments);
-};
