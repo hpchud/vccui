@@ -6,7 +6,7 @@ In the simplest usage, it can facilitate web based SSH access to one or more sys
 
 ## Installation
 
-The software runs on `nodejs`. `npm` and `bower` are used to handle server side and client side libraries respectively. `grunt` is used to automate building the solution. You will most likely need to install the PAM development headers for your system. A CouchDB database is required to hold configuration for allowed users and the details for.
+The software runs on `nodejs`. `npm` and `bower` are used to handle server side and client side libraries respectively. `grunt` is used to automate building the solution. You will most likely need to install the PAM development headers for your system. A CouchDB database is required to hold configuration for users.
 
 Run most commands as root user.
 
