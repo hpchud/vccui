@@ -6,7 +6,7 @@ database:
   url: http://localhost:5984/qggusers
   username: user
   password: pass
-mode: shell
+mode: localshell
 shell: /bin/bash
 shellargs:
   - -c

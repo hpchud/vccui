@@ -190,7 +190,7 @@ var setupSocket = function(socket, data) {
         var uid = doc['localuid'];
         // set up terminal
         var term;
-        if (config.mode == "shell") {
+        if (config.mode == "localshell") {
             term = pty.spawn(config.shell, config.shellargs, {
                 name: 'xterm-256color',
                 cols: 80,
