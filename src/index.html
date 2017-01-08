@@ -65,7 +65,7 @@
                   <!-- Menu Footer-->
                   <li class="user-footer">
                     <div class="pull-right">
-                      <a href class="btn btn-default btn-flat">Sign out</a>
+                      <a href="javascript:logout();" class="btn btn-default btn-flat">Sign out</a>
                     </div>
                     <div class="pull-left">
                     </div>
@@ -132,6 +132,15 @@
     </div>
 
     </div><!-- ./wrapper -->
+
+    <script type="text/javascript">
+        // handler for logout button click
+        var logout = function() {
+          // delete the token and reload page
+          localStorage.setItem("vccui_token", "");
+          location.reload();
+        };
+    </script>
 
   </body>
 </html>
