@@ -6,3 +6,8 @@ database:
   url: http://localhost:5984/qggusers
   username: user
   password: pass
+mode: shell
+shell: /bin/bash
+shellargs:
+  - -c
+  - tmux attach || tmux new

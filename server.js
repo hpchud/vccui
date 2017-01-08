@@ -190,12 +190,14 @@ var setupSocket = function(socket, data) {
         var uid = doc['localuid'];
         // set up terminal
         var term;
-        term = pty.spawn('/bin/bash', ['-c', 'tmux attach || tmux new'], {
-            name: 'xterm-256color',
-            cols: 80,
-            rows: 30,
-            uid: uid
-        });
+        if (config.mode == "shell") {
+            term = pty.spawn(config.shell, config.shellargs, {
+                name: 'xterm-256color',
+                cols: 80,
+                rows: 30,
+                uid: uid
+            });
+        }
         console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + data.name);
         // set up events
         term.on('data', function(data) {
