@@ -35,6 +35,7 @@ angular.module( 'vccui.dash', [
       data: {token: token},
       success: function (result) {
         $scope.motd = result.motd;
+        $scope.$apply();
       },
       error: function (XMLHttpRequest, textStatus, error) {
         deferred.reject(textStatus);
