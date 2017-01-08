@@ -178,8 +178,13 @@ router.get('/motd', function(req, res) {
 
 router.get('/connections', function(req, res) {
     var connections = [];
-    if (config.mode == "localshell") {
+    if ((config.mode == "localshell") || (config.mode == "shell+ssh")) {
         connections.push('localshell');
+    }
+    if (config.mode == "shell+ssh") {
+        for (var i = config.sshhosts.length - 1; i >= 0; i--) {
+            connections.push(config.sshhosts[i]);
+        }
     }
     res.json({hostname: os.hostname(), connections: connections});
 });
@@ -199,13 +204,25 @@ var setupSocket = function(socket, data) {
         var uid = doc['localuid'];
         // set up terminal
         var term;
-        if (config.mode == "localshell") {
-            term = pty.spawn(config.shell, config.shellargs, {
-                name: 'xterm-256color',
-                cols: 80,
-                rows: 30,
-                uid: uid
-            });
+        if (data.connection == "localshell") {
+            if ((config.mode == "localshell") || (config.mode == "shell+ssh")) {
+                term = pty.spawn(config.shell, config.shellargs, {
+                    name: 'xterm-256color',
+                    cols: 80,
+                    rows: 30,
+                    uid: uid
+                });
+            }
+        } else {
+            if (config.mode == "shell+ssh") {
+                // launch a shell for the user and run ssh command to the target system
+                term = pty.spawn(config.shell, ['-c', 'ssh '+data.connection], {
+                    name: 'xterm-256color',
+                    cols: 80,
+                    rows: 30,
+                    uid: uid
+                });
+            }
         }
         console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + data.name);
         // set up events

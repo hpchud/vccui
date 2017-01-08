@@ -3,11 +3,15 @@
 secret: scotchscotchscotch
 motd: /etc/motd
 database:
-  url: http://localhost:5984/qggusers
+  url: http://localhost:5984/databasename
   username: user
   password: pass
-mode: localshell
+mode: localshell [or shell+ssh]
 shell: /bin/bash
 shellargs:
   - -c
   - tmux attach || tmux new
+sshhosts:
+  - localhost
+  - eridani
+  - qgg
