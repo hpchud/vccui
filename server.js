@@ -254,7 +254,8 @@ var setupSocket = function(socket, data) {
             socket.emit('output', data);
         });
         term.on('exit', function(code) {
-            console.log((new Date()) + " PID=" + term.pid + " ENDED")
+            console.log((new Date()) + " PID=" + term.pid + " ENDED");
+            socket.disconnect(0);
         });
         socket.on('resize', function(data) {
             term.resize(data.col, data.row);
