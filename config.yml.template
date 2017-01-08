@@ -1,6 +1,6 @@
 ---
 
-secret: scotchscotchscotch
+secret: secret phrase used to generate auth tokens
 motd: /etc/motd
 database:
   url: http://localhost:5984/databasename

@@ -43,6 +43,16 @@ $ npm install
 $ bower install
 ```
 
+## Configuration
+
+Make a copy of the `config.yml.template` file called `config.yml`. The format of this file is self explanatory. Set the correct database connection details. You should also change the secret for generating the authentication tokens. You can also set the path to a `motd` file that will be shown to users on the dashboard.
+
+There are two available modes: `localshell` or `shell+ssh`. 
+
+In `localshell` mode, any authenticated user will be granted a shell local to the machine running vccui. The `shell` command will be launched with the arguments `shellargs`.
+
+In `shell+ssh` mode, the server will run an SSH process for the user to connect to a remote machine. The list of machines in `sshhosts` will be available to choose from in the web application. In this mode, the `shellargs` will be ignored. Additional connection information for the remote hosts must be defined in the user's `~/.ssh/config`. To make best use of this mode, passwordless SSH can be configured for seamless access, without an intermediate password prompt.
+
 ## Running (development server)
 
 ```
