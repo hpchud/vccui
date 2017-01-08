@@ -63,6 +63,22 @@ angular.module( 'vccui', [
     });
     return deferred.promise;
   };
+
+  authService.getConnections = function (token) {
+    var deferred = $q.defer();
+    jQuery.ajax({
+      type: "GET",
+      url: "/api/connections",
+      data: {token: token},
+      success: function (result) {
+        deferred.resolve(result);
+      },
+      error: function (XMLHttpRequest, textStatus, error) {
+        deferred.reject(textStatus);
+      }
+    });
+    return deferred.promise;
+  };
  
   authService.isAuthenticated = function () {
     if($rootScope.currentUser) {
@@ -117,7 +133,7 @@ angular.module( 'vccui', [
   });
 })
 
-.controller( 'AppCtrl', function AppCtrl ( $scope, $rootScope, $location, USER_ROLES, AuthService ) {
+.controller( 'AppCtrl', function AppCtrl ( $scope, $rootScope, $location, USER_ROLES, AUTH_EVENTS, AuthService ) {
   $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
     if ( angular.isDefined( toState.data.pageTitle ) ) {
       $scope.pageTitle = toState.data.pageTitle + ' | vccui' ;
@@ -126,6 +142,7 @@ angular.module( 'vccui', [
 
   // initialise currentUser on the scope
   $rootScope.currentUser = null;
+  $rootScope.connections = [];
   $rootScope.isAuthorized = AuthService.isAuthorized;
   // use setter to avoid shadow properties
   $rootScope.setCurrentUser = function (user) {
@@ -136,7 +153,14 @@ angular.module( 'vccui', [
   $rootScope.humanTime = function (unixtime) {
     return moment.unix(unixtime).format("YYYY-MM-DD HH:mm:ss");
   };
-
+  // listen for the update connections event and update the connections menu list on the root scope
+  $rootScope.connections = [];
+  $rootScope.$on(AUTH_EVENTS.refreshConnections, function (event, data) {
+    console.log("refresh connections");
+    AuthService.getConnections(localStorage.getItem("vccui_token")).then(function (connections) {
+      $rootScope.connections = connections.connections;
+    });
+  });
 })
 
 .controller('LoginCtrl', function ( $state, $scope, $rootScope, AUTH_EVENTS, AuthService, Database ) {
@@ -178,6 +202,8 @@ angular.module( 'vccui', [
         $rootScope.loginBlockedState = null;
       });
     }
+    // refresh connections
+    $rootScope.$broadcast(AUTH_EVENTS.refreshConnections);
   });
 
   // listen for the "notAuthorized" event
@@ -219,6 +245,15 @@ angular.module( 'vccui', [
             }
         }
       ]
+    });
+  });
+
+  // listen for the update connections event 
+  $rootScope.$on(AUTH_EVENTS.refreshConnections, function (event, data) {
+    console.log("refresh connections");
+    AuthService.getConnections(localStorage.getItem("vccui_token")).then(function (connections) {
+      console.log(connections);
+      $rootScope.connections = connections.connections;
     });
   });
 

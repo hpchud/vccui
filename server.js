@@ -10,6 +10,7 @@ var pty = require('pty.js');
 var fs = require('fs');
 var path = require('path');
 var yamljs = require('yamljs');
+var os = require('os');
 
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -173,6 +174,14 @@ router.get('/motd', function(req, res) {
       }
       res.json({motd: data});
     });
+});
+
+router.get('/connections', function(req, res) {
+    var connections = [];
+    if (config.mode == "localshell") {
+        connections.push('localshell');
+    }
+    res.json({hostname: os.hostname(), connections: connections});
 });
 
 app.use('/api', router);

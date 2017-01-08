@@ -10,7 +10,8 @@ angular.module ( 'vccui.constants', [])
   logoutSuccess: 'auth-logout-success',
   sessionTimeout: 'auth-session-timeout',
   notAuthenticated: 'auth-not-authenticated',
-  notAuthorized: 'auth-not-authorized'
+  notAuthorized: 'auth-not-authorized',
+  refreshConnections: 'refresh-connections'
 })
 
 .constant('USER_ROLES', {

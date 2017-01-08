@@ -7,6 +7,9 @@ angular.module( 'vccui.console', [
 .config(function config( $stateProvider, USER_ROLES ) {
   $stateProvider.state( 'console', {
     url: '/console',
+    params: {
+        connection: null
+      },
     views: {
       "main": {
         controller: 'ConsoleCtrl',
@@ -23,7 +26,11 @@ angular.module( 'vccui.console', [
 /**
  * And of course we define a controller for our route.
  */
-.controller( 'ConsoleCtrl', function ConsoleController( $scope, $rootScope ) {
+.controller( 'ConsoleCtrl', function ConsoleController( $scope, $rootScope, $stateParams ) {
+  if (!$stateParams.connection) {
+    console.log("no connection specified");
+    return;
+  }
   var term;
   var buf = '';
   var socket = io(location.origin, {path: '/wetty/socket.io'});
@@ -119,7 +126,7 @@ angular.module( 'vccui.console', [
 
   socket.on('connect', function() {
     console.log('sending authentication for socket');
-    socket.emit('authentication', {token: localStorage.getItem("vccui_token"), name: $rootScope.currentUser.name});
+    socket.emit('authentication', {token: localStorage.getItem("vccui_token"), name: $rootScope.currentUser.name, connection: $stateParams.connection});
   });
 
 })

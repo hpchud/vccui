@@ -87,7 +87,9 @@
             <li class="header">Navigation</li>
             <!-- Optionally, you can add icons to the links -->
             <li><a href ui-sref="dash"><i class="fa fa-home"></i> <span>Home</span></a></li>
-            <li><a href ui-sref="console"><i class="fa fa-terminal"></i> <span>Console</span></a></li>
+            <li ng-repeat="conn in connections">
+              <a href ui-sref="console({connection: conn})"><i class="fa fa-terminal"></i> <span>{{ conn }}</span></a>
+            </li>
           </ul><!-- /.sidebar-menu -->
         </section>
         <!-- /.sidebar -->
