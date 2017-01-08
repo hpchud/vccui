@@ -175,11 +175,6 @@ angular.module( 'vccui', [
       AuthService.getUser(token).then(function (userdata) {
         $rootScope.setCurrentUser(userdata);
         $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-        // apply the user's image
-        AuthService.getPicture(token).then(function (data) {
-          jQuery('#UserPictureSmall').attr('src', data['picture']);
-          jQuery('#UserPictureLarge').attr('src', data['picture']);
-        });
       }).catch(function (err) {
         console.log("token probably expired, deleting it...");
         localStorage.setItem("vccui_token", "");
@@ -204,6 +199,11 @@ angular.module( 'vccui', [
     }
     // refresh connections
     $rootScope.$broadcast(AUTH_EVENTS.refreshConnections);
+    // apply the user's image
+    AuthService.getPicture(token).then(function (data) {
+      jQuery('#UserPictureSmall').attr('src', data['picture']);
+      jQuery('#UserPictureLarge').attr('src', data['picture']);
+    });
   });
 
   // listen for the "notAuthorized" event
