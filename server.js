@@ -211,7 +211,8 @@ var setupSocket = function(socket, data) {
             term.write(data);
         });
         socket.on('disconnect', function() {
-            term.end();
+            console.log("socket disconnected, killing terminal...");
+            term.destroy();
         });
     });
 };
