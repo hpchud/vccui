@@ -189,6 +189,7 @@ angular.module( 'vccui', [
   // listen for the "loginSuccess" event
   $rootScope.$on(AUTH_EVENTS.loginSuccess, function (event, data) {
     console.log("event: loginSuccess");
+    var token = localStorage.getItem("vccui_token");
     // hide the login modal if shown
     $('#loginModal').modal('hide');
     // see if we blocked a state change
